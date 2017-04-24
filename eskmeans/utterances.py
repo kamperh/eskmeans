@@ -84,8 +84,8 @@ class Utterances(object):
         self.vec_ids = -1*np.ones((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
         for i_vec_id, vec_id in enumerate(vec_ids):
             self.vec_ids[i_vec_id, :len(vec_id)] = vec_id
-        # self.durations = -np.nan*np.ones((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
-        self.durations = np.zeros((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
+        self.durations = -np.nan*np.ones((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
+        # self.durations = np.zeros((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
         for i_duration_vec, duration_vec in enumerate(durations):
             if not (min_duration == 0 or len(duration_vec) == 1):
                 cur_duration_vec = np.array(duration_vec, dtype=np.float)
