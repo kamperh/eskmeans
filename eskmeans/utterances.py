@@ -85,12 +85,14 @@ class Utterances(object):
         for i_vec_id, vec_id in enumerate(vec_ids):
             self.vec_ids[i_vec_id, :len(vec_id)] = vec_id
         # self.durations = -np.nan*np.ones((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
-        self.durations = np.zeros((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
+        self.durations = -1*np.ones((self.D, self.N_max*(self.N_max + 1)/2), dtype=np.int32)
         for i_duration_vec, duration_vec in enumerate(durations):
             if not (min_duration == 0 or len(duration_vec) == 1):
                 cur_duration_vec = np.array(duration_vec, dtype=np.float)
-                cur_duration_vec[cur_duration_vec < min_duration] = -np.nan
-                if np.all(np.isnan(cur_duration_vec)):
+                # cur_duration_vec[cur_duration_vec < min_duration] = -np.nan
+                cur_duration_vec[cur_duration_vec < min_duration] = -1
+                # if np.all(np.isnan(cur_duration_vec)):
+                if np.all(cur_duration_vec == -1):
                     cur_duration_vec[np.argmax(duration_vec)] = np.max(duration_vec)
                 duration_vec = cur_duration_vec
             self.durations[i_duration_vec, :len(duration_vec)] = duration_vec
@@ -152,6 +154,23 @@ class Utterances(object):
         j_prev = 0
         for j in range(self.lengths[i]):
             if self.boundaries[i, j]:
+                # We aim to extract seq[j_prev:j+1]. Let the location of this
+                # ID be `vec_ids[i, k]`, and we need to find k.
+                k = int(0.5*(j + 1)*j)  # this is the index of the seq[0:j] in `vec_ids[i]`
+                k += j_prev  # this is the index of the seq[j_prev:j] in `vec_ids[i]`
+                embed_ids.append(self.vec_ids[i, k])
+                j_prev = j + 1
+        return embed_ids
+
+    def get_segmented_embeds_i_bounds(self, i, boundaries):
+        """
+        Return a list of embedding IDs according to the given segmentation
+        for utterance `i`.
+        """
+        embed_ids = []
+        j_prev = 0
+        for j in range(self.lengths[i]):
+            if boundaries[j]:
                 # We aim to extract seq[j_prev:j+1]. Let the location of this
                 # ID be `vec_ids[i, k]`, and we need to find k.
                 k = int(0.5*(j + 1)*j)  # this is the index of the seq[0:j] in `vec_ids[i]`

@@ -360,10 +360,13 @@ class ESKmeans(object):
             print("sum_neg_len_sqrd_norms: " + str(np.sum(neg_sqrd_norms*np.array(lengths))))
 
         # Draw new boundaries for utterance i
-        sum_neg_len_sqrd_norm, self.utterances.boundaries[i, :N] = forward_backward_kmeans_viterbi(
+        sum_neg_len_sqrd_norm, new_boundaries = forward_backward_kmeans_viterbi(
             vec_embed_neg_len_sqrd_norms, N, self.n_slices_min, self.n_slices_max, i
             )
-        new_boundaries = self.utterances.boundaries[i, :N]
+        # sum_neg_len_sqrd_norm, self.utterances.boundaries[i, :N] = forward_backward_kmeans_viterbi(
+        #     vec_embed_neg_len_sqrd_norms, N, self.n_slices_min, self.n_slices_max, i
+        #     )
+        # new_boundaries = self.utterances.boundaries[i, :N]
 
         # Debug trace
         if DEBUG > 0 and i == I_DEBUG_MONITOR:
@@ -385,8 +388,12 @@ class ESKmeans(object):
 
         # Remove old embeddings and add new ones; this is equivalent to
         # assigning the new embeddings and updating the means.
-        new_embeds = self.utterances.get_segmented_embeds_i(i)
-        new_k = self.get_max_unsup_transcript_i(i)
+        # new_embeds = self.utterances.get_segmented_embeds_i(i)
+        # new_k = self.get_max_unsup_transcript_i(i)
+
+        new_embeds = self.utterances.get_segmented_embeds_i_bounds(i, new_boundaries)
+        new_k = self.get_max_unsup_transcript_i_embeds(i, new_embeds)
+
         # for i_embed in old_embeds:
         #     if i_embed == -1:
         #         continue  # don't remove a non-embedding (would accidently remove the last embedding)
@@ -511,6 +518,7 @@ class ESKmeans(object):
                     )
 
         return record_dict
+
     def get_vec_embed_neg_len_sqrd_norms(self, vec_ids, durations):
 
         # Get scores
@@ -523,7 +531,8 @@ class ESKmeans(object):
                 )
 
             # Scale log marginals by number of frames
-            if np.isnan(durations[i]):
+            # if np.isnan(durations[i]):
+            if durations[i] == -1:
                 vec_embed_neg_len_sqrd_norms[i] = -np.inf
             else:
                 vec_embed_neg_len_sqrd_norms[i] *= durations[i]#**self.time_power_term
@@ -542,6 +551,12 @@ class ESKmeans(object):
         Return a list of the best components for current segmentation of `i`.
         """
         return self.acoustic_model.get_max_assignments(self.utterances.get_segmented_embeds_i(i))
+
+    def get_max_unsup_transcript_i_embeds(self, i, embeddings):
+        """
+        Return a list of the best components for the given embeddings of `i`.
+        """
+        return self.acoustic_model.get_max_assignments(embeddings)
 
 
 #-----------------------------------------------------------------------------#
@@ -616,7 +631,7 @@ def forward_backward_kmeans_viterbi(vec_embed_neg_len_sqrd_norms, N,
             vec_embed_neg_len_sqrd_norms[i:i + t][-n_slices_max:n_slices_min_cut] +
             gammas[:t][-n_slices_max:n_slices_min_cut]
             )
-        assert not np.isnan(np.sum(q_t))
+        # assert not np.isnan(np.sum(q_t))
         if np.all(q_t == -np.inf):
             if DEBUG > 0:
                 print("Only impossible solutions for initial back-sampling for utterance " + str(i_utt))
