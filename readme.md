@@ -1,6 +1,9 @@
 Embedded Segmental K-Means
 ==========================
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kamperh/eskmeans/blob/master/license.md)
+
+
 Overview
 --------
 Perform unsupervised acoustic word segmentation using the embedded segmental
