@@ -25,7 +25,7 @@ Dependencies can be installed in a conda environment:
 
 Perform unit tests:
 
-    make test
+    nosetests -v
 
 
 Recipe
