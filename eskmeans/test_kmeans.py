@@ -32,7 +32,7 @@ def test_mean_numerators():
 
     # Test `mean_numerators`
     n = 0
-    for k in xrange(kmeans.K):
+    for k in range(kmeans.K):
         component_mean = kmeans.mean_numerators[k]/kmeans.counts[k]
         X_k = X[np.where(kmeans.assignments == k)]
         n += X_k.shape[0]
@@ -61,7 +61,7 @@ def test_neg_sqrd_norm():
     assignments = np.random.randint(0, K, N)
 
     # Make sure we have consequetive values
-    for k in xrange(assignments.max()):
+    for k in range(assignments.max()):
         while len(np.nonzero(assignments == k)[0]) == 0:
             assignments[np.where(assignments > k)] -= 1
         if assignments.max() == k:
@@ -70,10 +70,10 @@ def test_neg_sqrd_norm():
     kmeans = KMeans(X, K, assignments)
 
     # Test `neg_sqrd_norm`
-    for i in xrange(N):
+    for i in range(N):
         x_i = X[i, :]
         expected_sqrd_norms = []
-        for k in xrange(kmeans.K):
+        for k in range(kmeans.K):
             component_mean = kmeans.mean_numerators[k]/kmeans.counts[k]
             expected_sqrd_norms.append(np.linalg.norm(x_i - component_mean)**2)
         npt.assert_almost_equal(kmeans.neg_sqrd_norm(i)[:kmeans.K], -np.array(expected_sqrd_norms))
@@ -97,7 +97,7 @@ def test_expected_sum_neg_sqrd_norm():
     assignments = np.random.randint(0, K, N)
 
     # Make sure we have consequetive values
-    for k in xrange(assignments.max()):
+    for k in range(assignments.max()):
         while len(np.nonzero(assignments == k)[0]) == 0:
             assignments[np.where(assignments > k)] -= 1
         if assignments.max() == k:
@@ -107,10 +107,10 @@ def test_expected_sum_neg_sqrd_norm():
 
     # Test `sum_neg_sqrd_norm`
     expected_sum_neg_sqrd_norm = 0.
-    for i in xrange(N):
+    for i in range(N):
         x_i = X[i, :]
         expected_sqrd_norms = []
-        for k in xrange(kmeans.K):
+        for k in range(kmeans.K):
             component_mean = kmeans.mean_numerators[k]/kmeans.counts[k]
             expected_sqrd_norms.append(np.linalg.norm(x_i - component_mean)**2)
         expected_sum_neg_sqrd_norm += -np.array(expected_sqrd_norms)[kmeans.assignments[i]]

@@ -6,7 +6,7 @@ Contact: kamperh@gmail.com
 Date: 2016-2017
 """
 
-import cPickle as pickle
+import pickle
 import numpy as np
 import random
 import time
@@ -70,11 +70,11 @@ class KMeans(object):
 
         # Initial component assignments
         if assignments is not None:
-            if isinstance(assignments, basestring) and assignments == "rand":
+            if isinstance(assignments, str) and assignments == "rand":
                 assignments = np.random.randint(0, self.K_max, self.N)
-            elif isinstance(assignments, basestring) and assignments == "each-in-own":
+            elif isinstance(assignments, str) and assignments == "each-in-own":
                 assignments = np.arange(self.N)
-            elif isinstance(assignments, basestring) and assignments == "spread":
+            elif isinstance(assignments, str) and assignments == "spread":
                 assignment_list = (range(self.K_max)*int(np.ceil(float(self.N)/self.K_max)))[:self.N]
                 random.shuffle(assignment_list)
                 assignments = np.array(assignment_list)
@@ -83,7 +83,7 @@ class KMeans(object):
                 assignments = np.asarray(assignments, np.int)
 
             # Make sure we have consequetive values
-            for k in xrange(assignments.max()):
+            for k in range(assignments.max()):
                 while len(np.nonzero(assignments == k)[0]) == 0:
                     assignments[np.where(assignments > k)] -= 1
                 if assignments.max() == k:
@@ -185,7 +185,7 @@ class KMeans(object):
         squared norms of all the items.
         """
         objective = 0
-        for k in xrange(self.K):
+        for k in range(self.K):
             X = self.X[np.where(self.assignments == k)]
             mean = self.mean_numerators[k, :]/self.counts[k]
             deltas = mean - X
@@ -237,14 +237,14 @@ class KMeans(object):
         
         # Loop over iterations
         start_time = time.time()
-        for i_iter in xrange(n_iter):
+        for i_iter in range(n_iter):
 
             # List of tuples (i, k) where i is the data item and k is the new
             # component to which it should be assigned
             mean_numerator_updates = []
 
             # Assign data items
-            for i in xrange(self.N):
+            for i in range(self.N):
                 
                 # Keep track of old value in case we do not have to update
                 k_old = self.assignments[i]
