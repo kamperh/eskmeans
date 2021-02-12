@@ -3,7 +3,7 @@ Utility functions for plotting.
 
 Author: Herman Kamper
 Contact: kamperh@gmail.com
-Date: 2013, 2014
+Date: 2013, 2014, 2021
 """
 
 from matplotlib.patches import Ellipse
@@ -36,4 +36,7 @@ def plot_ellipse(ax, mu, sigma, color="b"):
 
 def plot_mixture_model(ax, model):
     X = np.array(model.components.X)
-    ax.scatter(X[:, 0], X[:, 1], color=colors[model.components.assignments].tolist(), s=10)
+    ax.scatter(
+        X[:, 0], X[:, 1], color=colors[model.components.assignments].tolist(),
+        s=10
+        )
