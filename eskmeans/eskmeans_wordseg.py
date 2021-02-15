@@ -11,8 +11,8 @@ import numpy as np
 import random
 import time
 
-from kmeans import KMeans
-from utterances import Utterances
+from eskmeans.kmeans import KMeans
+from eskmeans.utterances import Utterances
 
 DEBUG = 0
 SEGMENT_DEBUG_ONLY = False
@@ -121,7 +121,9 @@ class ESKmeans(object):
             assignments[init_embeds] = np.random.randint(0, K_max, len(init_embeds))
         elif init_assignments == "spread":
             n_init_embeds = len(init_embeds)
-            assignment_list = (range(K_max)*int(np.ceil(float(n_init_embeds)/K_max)))[:n_init_embeds]
+            assignment_list = (
+                list(range(K_max))*int(np.ceil(float(n_init_embeds)/K_max))
+                )[:n_init_embeds]
             random.shuffle(assignment_list)
             assignments[init_embeds] = np.array(assignment_list)
         self.acoustic_model = KMeans(embeddings, K_max, assignments)
@@ -163,8 +165,8 @@ class ESKmeans(object):
         # Get the scores of the embeddings
         N = self.utterances.lengths[i]
         vec_embed_neg_len_sqrd_norms = self.get_vec_embed_neg_len_sqrd_norms(
-            self.utterances.vec_ids[i, :(N**2 + N)/2],
-            self.utterances.durations[i, :(N**2 + N)/2]
+            self.utterances.vec_ids[i, :int((N**2 + N)/2)],
+            self.utterances.durations[i, :int((N**2 + N)/2)]
             )
 
         # Debug trace
@@ -268,12 +270,12 @@ class ESKmeans(object):
         record_dict["n_tokens"] = []
 
         # Loop over sampling iterations
-        for i_iter in xrange(n_iter):
+        for i_iter in range(n_iter):
 
             start_time = time.time()
 
             # Loop over utterances
-            utt_order = range(self.utterances.D)
+            utt_order = list(range(self.utterances.D))
             random.shuffle(utt_order)
             if SEGMENT_DEBUG_ONLY:
                 utt_order = [I_DEBUG_MONITOR]
@@ -454,7 +456,7 @@ class ESKmeans(object):
         record_dict["n_tokens"] = []
 
         # Loop over sampling iterations
-        for i_iter in xrange(n_iter):
+        for i_iter in range(n_iter):
 
             start_time = time.time()
 
@@ -469,7 +471,7 @@ class ESKmeans(object):
                 utt_order = utt_global_order[n_batch_size*i_batch:n_batch_size*(i_batch + 1)]
 
                 # Segment in parallel
-                utt_batches = [utt_order[i::n_cpus] for i in xrange(n_cpus)]
+                utt_batches = [utt_order[i::n_cpus] for i in range(n_cpus)]
                 updates = Parallel(n_jobs=n_cpus)(delayed(
                     local_segment_only_utts)(self, utts) for utts in utt_batches
                     )
@@ -608,7 +610,7 @@ def forward_backward_kmeans_viterbi(vec_embed_neg_len_sqrd_norms, N,
 
     # Forward filtering
     i = 0
-    for t in xrange(1, N):
+    for t in range(1, N):
         if np.all(vec_embed_neg_len_sqrd_norms[i:i + t][-n_slices_max:] +
                 gammas[:t][-n_slices_max:] == -np.inf):
             gammas[t] = -np.inf

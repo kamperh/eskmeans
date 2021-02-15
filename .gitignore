@@ -5,4 +5,4 @@
 !*.pyx
 !*.md
 !*.ipynb
-!Makefile
+examples/.ipynb_checkpoints/*
