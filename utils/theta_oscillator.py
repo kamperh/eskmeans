@@ -11,12 +11,12 @@ Based on the papers:
 
 This is a derivation of Adriana Stan's Python implementation available at
 https://github.com/speech-utcluj/thetaOscillator-syllable-segmentation. I
-modefied the code:
+modified the code:
 
 - To make it stand as an importable package.
 - Removed Matlab-like syntax (semicolons and % comments).
-- Updated `peakdet()` to use the correct syntaxt, which addressed deprecation
-  warnings.
+- Updated `peakdet()` to use the correct Python 3syntaxt, which addressed
+  deprecation warnings.
 - Fixed a bug where `len(env)` was used instead of `env.shape[1]`, resulting in
   the wrong boundaries being returned for very short utterances.
 
