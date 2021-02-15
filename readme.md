@@ -33,7 +33,7 @@ Examples
 --------
 A number of example notebooks are given in `examples/`. The
 [examples/eskmeans_example.ipynb](examples/eskmeans_example.ipynb) notebook
-provides a set-by-step example of the ES-KMeans algorithm. This notebook can
+provides a step-by-step example of the ES-KMeans algorithm. This notebook can
 also be opened directly in a [Colab
 notebook](https://colab.research.google.com/github/kamperh/eskmeans/blob/master/examples/eskmeans_example.ipynb).
 
