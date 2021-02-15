@@ -2,6 +2,7 @@ Embedded Segmental K-Means (ES-KMeans)
 ======================================
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kamperh/eskmeans/blob/master/license.md)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb)
 
 
 Overview
@@ -9,7 +10,7 @@ Overview
 Unsupervised acoustic word segmentation and clustering using the embedded
 segmental K-means (ES-KMeans) algorithm. The algorithm is described in:
 
-- H. Kamper, K. Livescu, and S. J. Goldwater, "An embedded segmental k-means
+- H. Kamper, K. Livescu, and S. J. Goldwater, "An embedded segmental K-means
   model for unsupervised segmentation and clustering of speech," in *Proc.
   ASRU*, 2017. [[arXiv](https://arxiv.org/abs/1703.08135)]
 
@@ -28,10 +29,13 @@ Perform unit tests:
     nosetests -v
 
 
+Examples
+--------
+
+
 Recipe
 ------
 **To-do.**
-
 
 
 Contributors

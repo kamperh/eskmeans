@@ -3,7 +3,7 @@ A class implementing the K-means algorithm.
 
 Author: Herman Kamper
 Contact: kamperh@gmail.com
-Date: 2016-2017
+Date: 2016-2017, 2021
 """
 
 import pickle
@@ -75,7 +75,9 @@ class KMeans(object):
             elif isinstance(assignments, str) and assignments == "each-in-own":
                 assignments = np.arange(self.N)
             elif isinstance(assignments, str) and assignments == "spread":
-                assignment_list = (range(self.K_max)*int(np.ceil(float(self.N)/self.K_max)))[:self.N]
+                assignment_list = (
+                    list(range(self.K_max))*int(np.ceil(float(self.N)/self.K_max))
+                    )[:self.N]
                 random.shuffle(assignment_list)
                 assignments = np.array(assignment_list)
             else:
