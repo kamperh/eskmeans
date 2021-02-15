@@ -38,6 +38,11 @@ Recipe
 **To-do.**
 
 
+License
+-------
+**To-do.**
+
+
 Contributors
 ------------
 - [Herman Kamper](http://www.kamperh.com/)
