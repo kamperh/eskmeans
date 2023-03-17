@@ -201,13 +201,13 @@ def get_boundaries(wav_fn, return_outh=False, fs=None):
     else:
         wav_data = wav_fn
         fs = fs
-    wav_data = librosa.resample(wav_data, fs, 16000)
+    wav_data = librosa.resample(wav_data, orig_sr=fs, target_sr=16000)
     fs = 16000
     # Compute gammatone envelopes and downsample to 1000 Hz
     coefs = gammatone.filters.make_erb_filters(fs, cfs, width=1.0)
     filtered_signal = gammatone.filters.erb_filterbank(wav_data, coefs)
     hilbert_envelope = np.abs(hilbert(filtered_signal))
-    env = librosa.resample(hilbert_envelope, fs, 1000)
+    env = librosa.resample(hilbert_envelope, orig_sr=fs, target_sr=1000)
 
     # Run oscillator-based segmentation
     Q_value = 0.5         # Q-value of the oscillator,
