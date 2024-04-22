@@ -142,7 +142,7 @@ class KMeans(object):
             if self.counts[k] != 0:
                 self.means[k, :] = self.mean_numerators[k, :] / self.counts[k]
             else:
-                self.del_components(k)
+                self.del_component(k)
 
     def del_component(self, k):
         """Remove component `k`."""
